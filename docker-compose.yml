@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  gitlab:
+    image: "gitlab/gitlab-ce:latest"
+    container_name: gitlab
+    restart: always
+    hostname: "Veronique11" # Nama host mesin fisik/server
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        # Gunakan URL akses internal yang sesuai DNS internal
+        external_url 'https://repo.intra.ptveronique.com'
+
+        # Konfigurasi SSH untuk Git (port dalam container tetap 22, dipetakan ke 20022 di host)
+        gitlab_rails['gitlab_shell_ssh_port'] = 20022
+
+        # Nonaktifkan fitur berat jika RAM terbatas (opsional, tapi disarankan untuk lingkungan internal)
+        prometheus_monitoring['enable'] = false
+        alertmanager['enable'] = false
+        node_exporter['enable'] = false
+        redis_exporter['enable'] = false
+        postgres_exporter['enable'] = false
+        gitlab_exporter['enable'] = false
+
+        # Opsional: nonaktifkan HTTPS redirect jika ingin pakai HTTP saja
+        # nginx['redirect_http_to_https'] = false
+    ports:
+      - "20080:80"
+      - "20443:443"
+      - "20022:22"
+    volumes:
+      - "./gitlab/config:/etc/gitlab"
+      - "./gitlab/logs:/var/log/gitlab"
+      - "./gitlab/data:/var/opt/gitlab"
+    shm_size: "256m"

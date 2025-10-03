@@ -1,0 +1,8 @@
+GITLAB_OMNIBUS_CONFIG
+# Opsional: nonaktifkan fitur berat jika RAM terbatas
+        # prometheus_monitoring['enable'] = false
+        # alertmanager['enable'] = false
+        # node_exporter['enable'] = false
+        # redis_exporter['enable'] = false
+        # postgres_exporter['enable'] = false
+        # gitlab_exporter['enable'] = false
